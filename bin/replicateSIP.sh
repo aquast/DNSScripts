@@ -88,10 +88,15 @@ for file in `ls -tra $SRCDIR/urn*zip`; do
   status=`echo $statusline | grep -oe '\"status\"\:\"[^\"]*' | sed -e 's/\"//g' | cut -d":" -f2`
   #status=`echo $tempstatus | cut -d: -f2`
   # archivierte Version (1-master, 2-1.Delta.....)
-  package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | grep -o ',' | wc -l`
-  let package=package+1
+
+  # new API Version
+#  package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | grep -o ',' | wc -l`
+#  let package=package+1
   
-  echo "Package Zauber: $status   $package  $fileversion"
+  # current API version
+  package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | sed -e 's/\"//g | cut -d":" -f2`
+
+  echo "Liste der Daten, die für die weitere Verarbeitung verwendet werden: \nPaketstatus: $status \nPaketversion nach Weservice: $package \nPaketversion nach lokaler Datei: $fileversion"
   #echo "Status: $status
 
   # Test ob die betrachtete Datei im Protokoll steht und
