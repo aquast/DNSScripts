@@ -96,7 +96,7 @@ for file in `ls -tra $SRCDIR/urn*zip`; do
   # current API version
   package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | sed -e 's/\"//g | cut -d":" -f2`
 
-  echo "Liste der Daten, die für die weitere Verarbeitung verwendet werden: \nPaketstatus: $status \nPaketversion nach Weservice: $package \nPaketversion nach lokaler Datei: $fileversion"
+  echo "Liste der Daten, die für die weitere Verarbeitung verwendet werden: \nPaketstatus: $status \nPaketversion nach Webservice: $package \nPaketversion nach lokaler Datei: $fileversion"
   #echo "Status: $status
 
   # Test ob die betrachtete Datei im Protokoll steht und
