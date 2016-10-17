@@ -13,6 +13,9 @@ PROTOC=$SRCDIR/protokoll.log
 WPROTOC=$SRCDIR/unklar.log
 ALERTCOUNT=3
 
+MAILADRESS0=""
+MAILADRESS1=""
+
 if [ -f $SRCDIR/.lock ]; then
    prid=`ps -p \`cat $SRCDIR/.lock\` | tail -1`
    if [ -n "$prid" ]; then
@@ -152,12 +155,12 @@ for file in `ls -tra $SRCDIR/urn*zip`; do
 done
 
 if [ -n "$FILELIST" ]; then
-    	printf "Sehr geehrte Damen und Herren,\n\nnachfolgend aufgefuehrte Datei(n) wurde(n) in das Verzeichnis $DSTDIR uebertragen.\nWir bitten um Weiterleitung in das DA-NRW.\n$FILELIST\n\nMit freundlichen Gruessen" | mail -s "Betreff" name@mail.de
+    	printf "Sehr geehrte Damen und Herren,\n\nnachfolgend aufgefuehrte Datei(n) wurde(n) in das Verzeichnis $DSTDIR uebertragen.\nWir bitten um Weiterleitung in das DA-NRW.\n$FILELIST\n\nMit freundlichen Gruessen" | mail -s "DA NRW Einlieferung" $MAILADRESS0 $MAILADRESS1
         touch $SRCDIR/fertig
 	rsync -e ssh $SRCDIR/fertig $INGESTUSER@$INGESTSERVER:$DSTDIR/fertig
 	rm -f $SRCDIR/fertig
 fi
 
 if [ -n "$PFILELIST" ]; then	
-	printf "Sehr geehrte Damen und Herren\nnachfolgend aufgefuehrte Dateie(n) befinden sich seit mehreren Tagen in einem nicht archivierten Zustand. Die genaue Angabe ist der Uebersicht zu entnehmen, wobei der erste Wert die URN und der zweite Wert Anzahl der Tage darstellt, seit dem das entsprechende SIP uebertragen wurde.\n\nMit freundlichen Gruessen\n$PFILELIST" | mail -s "Betreff" name@mail.de
+	printf "Sehr geehrte Damen und Herren\nnachfolgend aufgefuehrte Dateie(n) befinden sich seit mehreren Tagen in einem nicht archivierten Zustand. Die genaue Angabe ist der Uebersicht zu entnehmen, wobei der erste Wert die URN und der zweite Wert Anzahl der Tage darstellt, seit dem das entsprechende SIP uebertragen wurde.\n\nMit freundlichen Gruessen\n$PFILELIST" | mail -s "DA NRW Report" $MAILADRESS0 $MAILADRESS1
 fi
