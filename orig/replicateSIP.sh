@@ -3,8 +3,6 @@
 # SRCDIR=/data/ulbms/DA-NRW_VL-Retro_SIP
 
 # define directories and files in use 
-USER=""
-PASSWD=""
 INGESTSERVER=""
 INGESTUSER=""
 SRCDIR=""
@@ -82,7 +80,7 @@ for file in `ls -tra $SRCDIR/urn*zip`; do
              my $agent = LWP::UserAgent->new(ssl_opts => { verify_hostname => 0 });
              my $header = HTTP::Request->new(GET => $URL);
              my $request = HTTP::Request->new("GET", $URL, $header);
-             $request->authorization_basic("DE-5", "gH6xRx44");
+             $request->authorization_basic("XXX", "XXX");
              my $response = $agent->request($request); 
              my $result;
              if($response->is_success){
