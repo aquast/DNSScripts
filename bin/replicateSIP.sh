@@ -90,14 +90,23 @@ for file in `ls -tra $SRCDIR/urn*zip`; do
   # archivierte Version (1-master, 2-1.Delta.....)
 
   # new API Version
-#  package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | grep -o ',' | wc -l`
-#  let package=package+1
+  package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | grep -o ',' | wc -l`
+  let package=package+1
   
   # current API version
-  package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | sed -e 's/\"//g' | cut -d":" -f2`
+ # package=`echo $statusline|  grep -oe '\"packages\"\:\[\"[^\}]*' | sed -e 's/\"//g' | cut -d":" -f2`
 
-  echo "Liste der Daten, die für die weitere Verarbeitung verwendet werden: \nPaketstatus: $status \nPaketversion nach Webservice: $package \nPaketversion nach lokaler Datei: $fileversion"
+  echo -e "Liste der Daten, die für die weitere Verarbeitung verwendet werden: \nPaketstatus: $status \nPaketversion nach Webservice: $package \nPaketversion nach lokaler Datei: $fileversion"
   #echo "Status: $status
+
+  # Wenn Masterkapsel bereits uebertragen wurde aber noch nicht bearbeitet 
+  if [ -n "`grep $filename $PROTOC`" ]; then
+     if [ "$status" = "not found" -a "$fileversion" = "1" ]; then
+         echo "Lieferung wird abgebrochen, da sich Master noch in der Verarbeitung im DA NRW befindet"
+         ProblemAnalyse
+     fi 
+  fi
+
 
   # Test ob die betrachtete Datei im Protokoll steht und
   # wenn Status not found - also im Archiv noch nicht vorhanden - und die Masterdatei betrachtet wird -> Übertragung
@@ -109,14 +118,6 @@ for file in `ls -tra $SRCDIR/urn*zip`; do
         echo "Dateiübertragung erfolgt"
         echo "$filename"  >> $PROTOC
      fi
-  fi
-
-  # Wenn Masterkapsel bereits uebertragen wurde aber noch nicht bearbeitet 
-  if [ -n "`grep $filename $PROTOC`" ]; then
-     if [ "$status" = "not found" -a "$fileversion" = "1" ]; then
-         echo "Lieferung wird abgebrochen, da sich Master noch in der Verarbeitung im DA NRW befindet"
-         ProblemAnalyse
-     fi 
   fi
 
 
@@ -169,3 +170,4 @@ fi
 if [ -n "$PFILELIST" ]; then	
 	printf "Sehr geehrte Damen und Herren\nnachfolgend aufgefuehrte Dateie(n) befinden sich seit mehreren Tagen in einem nicht archivierten Zustand. Die genaue Angabe ist der Uebersicht zu entnehmen, wobei der erste Wert die URN und der zweite Wert Anzahl der Tage darstellt, seit dem das entsprechende SIP uebertragen wurde.\n\nMit freundlichen Gruessen\n$PFILELIST" | mail -s "DA NRW Report" $MAILADRESS0 $MAILADRESS1
 fi
+
